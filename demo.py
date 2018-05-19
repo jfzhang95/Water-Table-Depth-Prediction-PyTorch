@@ -56,10 +56,11 @@ X_train_dep_std = Variable(torch.from_numpy(X_train_dep_std).float())
 y_train_dep_std = Variable(torch.from_numpy(y_train_dep_std).float())
 X_test_dep_std = Variable(torch.from_numpy(X_test_dep_std).float())
 
-# Define model
+# Define rnn model
+# You can also choose rnn_type as 'rnn' or 'gru'
 model = RNN(input_size=5, hidden_size=40, num_layers=1, class_size=1, dropout=0.5, rnn_type='lstm')
 # Define optimization function
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)   # optimize all cnn parameters
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)   # optimize all rnn parameters
 # Define loss function
 loss_func = nn.MSELoss()
 
@@ -69,7 +70,7 @@ for iter in range(20000+1):
     prediction = model(X_train_dep_std)
     loss = loss_func(prediction, y_train_dep_std)
     optimizer.zero_grad()  # clear gradients for this training step
-    loss.backward()  # backpropagation, compute gradients
+    loss.backward()        # back propagation, compute gradients
     optimizer.step()
     if iter % 100 == 0:
         print("iteration: %s, loss: %s" % (iter, loss.item()))

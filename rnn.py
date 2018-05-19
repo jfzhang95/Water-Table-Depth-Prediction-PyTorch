@@ -37,7 +37,7 @@ class RNN(nn.Module):
             raise NotImplementedError
 
         self.dropout = nn.Dropout(dropout)
-        self.out = nn.Linear(self.hidden_size, self.class_size)
+        self.out = nn.Linear(self.hidden_size, self.class_size) # FC layer in our paper
 
     def forward(self, x):
         h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size)
