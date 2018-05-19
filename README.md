@@ -6,7 +6,7 @@ This is a PyTorch implementation of our work *Developing a Long Short-Term Memor
 ### Requirements
 ```
 Python3.x
-pytorch>=0.0.4
+pytorch>=0.4.0
 numpy>=1.14.0
 pandas>=0.22.0
 scikit-learn>=0.14
