@@ -8,10 +8,6 @@ from torch import nn
 import torch
 from torch.autograd import Variable
 
-if torch.cuda.is_available():
-    use_cuda = True
-else:
-    use_cuda = False
 
 ss_X_dep = StandardScaler()
 ss_y_dep = StandardScaler()
@@ -55,43 +51,63 @@ X_train_dep_std = np.expand_dims(X_train_dep_std, axis=0)
 y_train_dep_std = np.expand_dims(y_train_dep_std, axis=0)
 X_test_dep_std = np.expand_dims(X_test_dep_std, axis=0)
 
-
+# Transfer to Pytorch Variable
 X_train_dep_std = Variable(torch.from_numpy(X_train_dep_std).float())
 y_train_dep_std = Variable(torch.from_numpy(y_train_dep_std).float())
 X_test_dep_std = Variable(torch.from_numpy(X_test_dep_std).float())
 
-model = RNN(input_size=5, hidden_size=40, num_layers=1, class_size=1, dropout=0.5)
-
-if use_cuda:
-    model = model.cuda()
-
+# Define model
+model = RNN(input_size=5, hidden_size=40, num_layers=1, class_size=1, dropout=0.5, rnn_type='lstm')
+# Define optimization function
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)   # optimize all cnn parameters
+# Define loss function
 loss_func = nn.MSELoss()
 
-if use_cuda:
-    X_train_dep_std = X_train_dep_std.cuda()
-    y_train_dep_std = y_train_dep_std.cuda()
-    X_test_dep_std = X_test_dep_std.cuda()
-
-
-for i in range(15000):
+# Start training
+for iter in range(20000+1):
     model.train()
     prediction = model(X_train_dep_std)
     loss = loss_func(prediction, y_train_dep_std)
     optimizer.zero_grad()  # clear gradients for this training step
     loss.backward()  # backpropagation, compute gradients
     optimizer.step()
-    if i % 2000 == 0:
-        print(loss.item())
+    if iter % 100 == 0:
+        print("iteration: %s, loss: %s" % (iter, loss.item()))
 
+# Save model
+save_filename = 'checkpoints/LSTM_FC.pth'
+torch.save(model, save_filename)
+print('Saved as %s' % save_filename)
+
+# Start evaluating model
 model.eval()
-if use_cuda:
-    y_pred_dep_ = model(X_test_dep_std).detach().cpu().numpy()
-else:
-    y_pred_dep_ = model(X_test_dep_std).detach().numpy()
 
-y_pred_dep_ = ss_y_dep.inverse_transform(y_pred_dep_[0, 144:])
+y_pred_dep_ = model(X_test_dep_std).detach().numpy()
+y_pred_dep = ss_y_dep.inverse_transform(y_pred_dep_[0, 144:])
 
-print('the value of R-squared of Evaporation is ', r2_score(Outputs[144:], y_pred_dep_))
-print('the value of Root mean squared error of Evaporation is ', rmse(Outputs[144:], y_pred_dep_))
+print('the value of R-squared of Evaporation is ', r2_score(Outputs[144:], y_pred_dep))
+print('the value of Root mean squared error of Evaporation is ', rmse(Outputs[144:], y_pred_dep))
 
+f, ax1 = plt.subplots(1, 1, sharex=True, figsize=(6, 4))
+
+ax1.plot(Outputs[144:], color="blue", linestyle="-", linewidth=1.5, label="Measurements")
+ax1.plot(y_pred_dep, color="green", linestyle="--", linewidth=1.5, label="Proposed model")
+
+plt.legend(loc='upper right')
+plt.xticks(fontsize=8,fontweight='normal')
+plt.yticks(fontsize=8,fontweight='normal')
+plt.xlabel('Time (Month)', fontsize=10)
+plt.ylabel('Water table depth (m)', fontsize=10)
+plt.xlim(0, 25)
+plt.savefig('results.png', format='png')
+plt.show()
+
+
+##### Loading Model #####
+model = torch.load('checkpoints/LSTM_FC.pth')
+model.eval()
+y_pred_dep_ = model(X_test_dep_std).detach().numpy()
+y_pred_dep = ss_y_dep.inverse_transform(y_pred_dep_[0, 144:])
+
+print('the value of R-squared of Evaporation is ', r2_score(Outputs[144:], y_pred_dep))
+print('the value of Root mean squared error of Evaporation is ', rmse(Outputs[144:], y_pred_dep))
