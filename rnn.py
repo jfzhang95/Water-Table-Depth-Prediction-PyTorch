@@ -39,13 +39,17 @@ class RNN(nn.Module):
         self.dropout = nn.Dropout(dropout)
         self.out = nn.Linear(self.hidden_size, self.class_size)
 
-    def forward(self, x):
+    def forward(self, x, use_cuda=False):
         # x (batch, time_step, input_size)
         # h_state (n_layers, batch, hidden_size)
         # r_out (batch, time_step, hidden_size)
 
         h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size)
         c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size)
+
+        if use_cuda:
+            h0 = h0.cuda()
+            c0 = c0.cuda()
         r_out, _ = self.rnn(x, (h0, c0))
 
         outs = []    # save all predictions

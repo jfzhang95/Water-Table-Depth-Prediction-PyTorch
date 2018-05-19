@@ -8,6 +8,10 @@ from torch import nn
 import torch
 from torch.autograd import Variable
 
+if torch.cuda.is_available():
+    use_cuda = True
+else:
+    use_cuda = False
 
 ss_X_dep = StandardScaler()
 ss_y_dep = StandardScaler()
@@ -49,20 +53,45 @@ y_train_dep_std = ss_y_dep.fit_transform(y_train_dep)
 X_test_dep_std  = X
 X_train_dep_std = np.expand_dims(X_train_dep_std, axis=0)
 y_train_dep_std = np.expand_dims(y_train_dep_std, axis=0)
+X_test_dep_std = np.expand_dims(X_test_dep_std, axis=0)
+
 
 X_train_dep_std = Variable(torch.from_numpy(X_train_dep_std).float())
 y_train_dep_std = Variable(torch.from_numpy(y_train_dep_std).float())
-
+X_test_dep_std = Variable(torch.from_numpy(X_test_dep_std).float())
 
 model = RNN(input_size=5, hidden_size=40, num_layers=1, class_size=1, dropout=0.5)
+
+if use_cuda:
+    model = model.cuda()
+
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)   # optimize all cnn parameters
 loss_func = nn.MSELoss()
 
-for i in range(20):
+if use_cuda:
+    X_train_dep_std = X_train_dep_std.cuda()
+    y_train_dep_std = y_train_dep_std.cuda()
+    X_test_dep_std = X_test_dep_std.cuda()
+
+
+for i in range(15000):
+    model.train()
     prediction = model(X_train_dep_std)
-    loss = loss_func(prediction, y_train_dep_std) # cross entropy loss
+    loss = loss_func(prediction, y_train_dep_std)
     optimizer.zero_grad()  # clear gradients for this training step
     loss.backward()  # backpropagation, compute gradients
     optimizer.step()
-    print(loss)
+    if i % 2000 == 0:
+        print(loss.item())
+
+model.eval()
+if use_cuda:
+    y_pred_dep_ = model(X_test_dep_std).detach().cpu().numpy()
+else:
+    y_pred_dep_ = model(X_test_dep_std).detach().numpy()
+
+y_pred_dep_ = ss_y_dep.inverse_transform(y_pred_dep_[0, 144:])
+
+print('the value of R-squared of Evaporation is ', r2_score(Outputs[144:], y_pred_dep_))
+print('the value of Root mean squared error of Evaporation is ', rmse(Outputs[144:], y_pred_dep_))
 
