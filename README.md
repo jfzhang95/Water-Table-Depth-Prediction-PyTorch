@@ -39,11 +39,13 @@ Noted that the demo data ([demo.csv](https://github.com/jfzhang95/LSTM-water-tab
 ### Citation
 If you think our code is useful, please consider citing the following paper:
 
-	@article{Jianf+18,
-	  Title          = {Developing a Long Short-Term Memory (LSTM) based Model for Predicting Water Table Depth in Agricultural Areas},
-	  Author         = {Jianfeng Zhang, Yan Zhu, Xiaoping Zhang, Ming Ye, Jinzhong Yang},
-	  Journal        = {Journal of Hydrology},
-	  Year           = {2018}
+	@article{zjf18,
+	  journal        = {Journal of Hydrology},
+	  title          = {Developing a Long Short-Term Memory (LSTM) based Model for Predicting Water Table Depth in Agricultural Areas},
+	  author         = {J.F. Zhang, Y. Zhu, X.P. Zhang, M. Ye, J.Z. Yang},
+	  year           = {2018},
+	  volume         = {561},
+	  pages          = {918-929}
 	}
 
 
