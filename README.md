@@ -42,11 +42,11 @@ If you think our code is useful, please consider citing the following paper:
 	@article{Jianf+18,
 	  Title          = {Developing a Long Short-Term Memory (LSTM) based Model for Predicting Water Table Depth in Agricultural Areas},
 	  Author         = {Jianfeng Zhang, Yan Zhu, Xiaoping Zhang, Ming Ye, Jinzhong Yang},
-	  Journal      = {Journal of Hydrology},
+	  Journal        = {Journal of Hydrology},
 	  Year           = {2018}
 	}
 
 
 ### License
-[MIT](https://github.com/jfzhang95/Wwater-Table-Depth-Prediction-PyTorch/blob/master/LICENSE)
+[MIT](https://github.com/jfzhang95/Water-Table-Depth-Prediction-PyTorch/blob/master/LICENSE)
 
