@@ -34,7 +34,7 @@ The code was tested with Python 3.5. To use this code, please do:
 If installed correctly, the result should look like this:
 ![results](doc/results.png)
 
-Noted that the demo data ([demo.csv](https://github.com/jfzhang95/LSTM-water-table-depth-prediction/blob/master/data/demo.csv)) are processed manually,  so they are not real data, but they still can reflect the correlation between the original data.
+Noted that the demo data ([demo.csv](https://github.com/jfzhang95/Water-Table-Depth-Prediction-PyTorch/blob/master/data/demo.csv)) are processed manually,  so they are not real data, but they still can reflect the correlation between the original data.
 
 ### Citation
 If you think our code is useful, please consider citing the following paper:
