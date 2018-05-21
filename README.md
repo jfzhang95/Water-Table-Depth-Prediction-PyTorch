@@ -25,7 +25,7 @@ The code was tested with Python 3.5. To use this code, please do:
     ```Shell
     pip install matplotlib numpy pandas scikit-learn
     ```
-    For pytorch installation, please see in [PyTorch.org[https://pytorch.org/]].
+    For pytorch installation, please see in [PyTorch.org](https://pytorch.org/).
   
 2. To try the demo code, please run:
     ```Shell
