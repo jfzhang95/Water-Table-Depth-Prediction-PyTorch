@@ -38,7 +38,7 @@ If installed correctly, the result should look like this:
 Noted that the demo data ([demo.csv](https://github.com/jfzhang95/Water-Table-Depth-Prediction-PyTorch/blob/master/data/demo.csv)) are processed manually,  so they are not real data, but they still can reflect the correlation between the original data.
 
 ### Citation
-If you think our code is useful, please consider citing the following paper:
+If you use this code, please consider citing our paper:
 
 	@article{zjf18,
 	  journal        = {Journal of Hydrology},
