@@ -17,7 +17,7 @@ The code was tested with Python 3.5. To use this code, please do:
 
 0. Clone the repo:
     ```Shell
-    git https://github.com/jfzhang95/Water-Table-Depth-Prediction-PyTorch
+    git clone https://github.com/jfzhang95/Water-Table-Depth-Prediction-PyTorch
     cd Water-Table-Depth-Prediction-PyTorch
     ```
  
